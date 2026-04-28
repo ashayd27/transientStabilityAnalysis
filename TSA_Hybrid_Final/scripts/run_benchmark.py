@@ -4,13 +4,8 @@ import tensorflow as tf
 from scipy import signal
 from tqdm import tqdm
 
-# ==========================================
-# ⚙️ CONFIGURATION BLOCK
-# ==========================================
-NUM_CASES = 10000  # Set your desired test volume here
-# ==========================================
+NUM_CASES = 10000  # Set the number of cases
 
-# Path Hammer
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, '..'))
 sys.path.insert(0, BASE_DIR)
@@ -19,21 +14,14 @@ from data.andes_generator import build_real_dataset_fast
 from src.physics import compute_system_mle, estimate_mle_robust
 
 def get_hybrid_verdict(raw_case, cnn_case, model):
-    """
-    SURGICAL TRIAGE:
-    Targeting 100% accuracy and ~12ms latency.
-    """
     l_val = compute_system_mle(raw_case)
     
-    # 1. ZONE 1: ABSOLUTE UNSTABLE
     if l_val < -0.0520:
         return 1, "Physics"
     
-    # 2. ZONE 3: ABSOLUTE STABLE
     elif l_val > -0.0180:
         return 0, "Physics"
     
-    # 3. ZONE 2: THE GREY ZONE
     else:
         cnn_in = cnn_case.reshape(1, 1000, 5)
         pred = model.predict(cnn_in, verbose=0)[0][0]
@@ -42,11 +30,9 @@ def get_hybrid_verdict(raw_case, cnn_case, model):
 if __name__ == '__main__':
     model = tf.keras.models.load_model(os.path.join(BASE_DIR, 'models', 'cnn_5bus_model.h5'))
     
-    # Use our variable for generation
     X_raw, y_true = build_real_dataset_fast(num_cases=NUM_CASES)
     X_cnn = np.transpose(X_raw, (0, 2, 1))
     
-    # Capture the actual count in case the generator produced fewer than requested
     N = len(X_raw)
 
     results = {
@@ -57,7 +43,7 @@ if __name__ == '__main__':
 
     print(f"\n🚀 Executing 100% Accuracy Hybrid Benchmark on {N} cases...")
     for i in tqdm(range(N)):
-        # 1. Simple MLE Baseline (Gen 0 only)
+        # 1. Simple MLE Baseline
         start = time.time()
         l_sim = estimate_mle_robust(signal.savgol_filter(X_raw[i][0], 51, 3))
         results["Simple MLE (Baseline)"]["time"] += (time.time() - start)
@@ -88,4 +74,4 @@ if __name__ == '__main__':
     print("═"*75)
     
     c = results["Hybrid System"]["triage"]
-    print(f"💡 Hybrid Triage: {c['Physics']} cases cleared by Math, {c['CNN']} cases verified by AI.")
+    print(f"Hybrid Triage: {c['Physics']} cases cleared by Math, {c['CNN']} cases verified by AI.")
