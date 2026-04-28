@@ -4,7 +4,6 @@ import numpy as np
 from scipy import signal
 from tqdm import tqdm
 
-# Path Hammer
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, '..'))
 sys.path.insert(0, BASE_DIR)
@@ -14,7 +13,7 @@ from src.physics import compute_system_mle
 
 if __name__ == '__main__':
     NUM_SAMPLES = 500
-    print(f"🔬 Initializing IEEE 14-Bus Lambda Probe on {NUM_SAMPLES} cases...")
+    print(f"Initializing IEEE 14-Bus Lambda Probe on {NUM_SAMPLES} cases")
     X_raw, y_true = build_real_dataset_fast(num_cases=NUM_SAMPLES)
     
     stable_vals = []
@@ -35,7 +34,7 @@ if __name__ == '__main__':
     unstable = np.array(unstable_vals)
 
     print("\n" + "═"*70)
-    print("📈 STATISTICAL BOUNDARY REPORT (SCALED FOR IEEE STANDARD)")
+    print("STATISTICAL BOUNDARY REPORT (SCALED FOR IEEE STANDARD)")
     print("═"*70)
     print(f"STABLE TRANSIENTS:")
     print(f"  Mean: {np.mean(stable):.5f} | Min: {np.min(stable):.5f} | Max: {np.max(stable):.5f}")
@@ -50,8 +49,8 @@ if __name__ == '__main__':
     safe_stable = np.max(stable)
     safe_unstable = np.min(unstable)
     
-    print("\n🎯 RECOMMENDED HYBRID TRIAGE THRESHOLDS:")
+    print("\nRECOMMENDED HYBRID TRIAGE THRESHOLDS:")
     print(f"  Zone 1 (Fast Unstable):  λ > {safe_unstable:.3f}")
     print(f"  Zone 3 (Fast Stable):    λ < {safe_stable:.3f}")
     print(f"  Zone 2 (The Grey Zone):  [{safe_stable:.3f}, {safe_unstable:.3f}] -> Route to CNN")
-    print("\n✅ Probe Complete. Thresholds match paper methodology.")
+    print("\nProbe Complete. Thresholds match paper methodology.")
