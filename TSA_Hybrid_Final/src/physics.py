@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import signal  # <--- THIS WAS THE MISSING PIECE
+from scipy import signal
 from sklearn.linear_model import LinearRegression
 
 def get_all_generator_thetas(raw_data):
@@ -13,10 +13,6 @@ def get_all_generator_thetas(raw_data):
     return thetas - coi
 
 def estimate_mle_robust(x, m=5, J=10):
-    """
-    Tuned for 14-Bus dynamics:
-    Uses Linear Regression for a stable slope instead of jumpy snapshots.
-    """
     N = len(x)
     N_eff = N - (m - 1) * J
     if N_eff < 100: return -0.5
