@@ -9,7 +9,7 @@ This repository contains the codebase for a novel Hybrid Transient Stability Ass
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 * `/data` - Contains the ANDES-based synthetic data generator (`andes_generator.py`).
 * `/src` - The core physics engine (`physics.py`) for multi-machine MLE scanning.
@@ -21,15 +21,35 @@ This repository contains the codebase for a novel Hybrid Transient Stability Ass
 
 ---
 
-## ⚙️ Installation & Prerequisites
+## Installation & Prerequisites
 
 **1. Clone the repository:**
 ```bash
 git clone [https://github.com/YOUR_USERNAME/TSA_Hybrid_Final.git](https://github.com/YOUR_USERNAME/TSA_Hybrid_Final.git)
 cd TSA_Hybrid_Final
+```
 
 **2. Install Python dependencies:**
 The project relies on standard scientific libraries and the ANDES simulation engine.
 ```bash
 pip install -r requirements.txt
+```
+## How to Run the Project
 
+**1. Generate the Physical Grid Data**
+Because the physical simulation data is too large to host on GitHub, you must generate it locally. This script uses multi-processing to simulate thousands of dynamic grid faults via the ANDES engine and injects realistic PMU thermal noise (σ = 0.01 rad).
+```bash
+python data/andes_generator.py
+```
+
+**2. Discover Triage Thresholds (using Lambda Probing)**
+Run the statistical probe to map the probability density functions of the Stable and Unstable cases. This script performs a high-volume analysis of the generated transients to mathematically define the "Grey Zone" boundaries ($0.018 \leq \lambda \leq 0.052$) used by the Hybrid logic.
+```bash
+python scripts/probe_lambdas.py
+```
+
+**3. Run the Performance Benchmark**
+This is the final execution step. The script streams the generated data sequentially to calculate the real-time performance of all three methodologies. It measures accuracy and latency to verify the hybrid framework's ability to resolve cases at sub-cycle speeds (~12.26 ms).
+```bash
+python scripts/run_benchmark.py
+```
