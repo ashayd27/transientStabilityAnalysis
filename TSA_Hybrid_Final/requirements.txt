@@ -1,0 +1,7 @@
+numpy
+scipy
+tensorflow
+andes
+matplotlib
+graphviz
+tqdm
