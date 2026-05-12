@@ -3,11 +3,6 @@ from scipy import signal
 from sklearn.linear_model import LinearRegression
 
 def get_all_generator_thetas(raw_data):
-    """
-    Assumes the first 5 rows of your 14x1000 data are the generators.
-    Calculates Center of Inertia (COI) and returns relative angles.
-    """
-    # Assuming rows 0-4 are the 5 generators in the 14-bus system
     thetas = raw_data[:5, :] 
     coi = np.mean(thetas, axis=0)
     return thetas - coi
@@ -41,16 +36,11 @@ def estimate_mle_robust(x, m=5, J=10):
     return float(model.coef_[0][0])
 
 def compute_system_mle(raw_case):
-    """
-    THE SCANNER:
-    Applies the polynomial filter to all 5 generators and returns 
-    the maximum MLE found in the system.
-    """
     gen_thetas = get_all_generator_thetas(raw_case)
     mle_values = []
     
     for i in range(5):
-        # Smoothing out the PMU noise (The Savior!)
+        # Smoothing out the PMU noise
         polished = signal.savgol_filter(gen_thetas[i], 51, 3)
         mle_values.append(estimate_mle_robust(polished))
         
