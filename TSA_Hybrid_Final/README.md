@@ -11,7 +11,7 @@ This repository contains the codebase for a novel Hybrid Transient Stability Ass
 
 ## Repository Structure
 
-* `/data` - Contains the ANDES-based synthetic data generator (`andes_generator.py`).
+* `/data` - Contains the ANDES-based synthetic data generator for an IEEE 14-bus system (`andes_generator.py`).
 * `/src` - The core physics engine (`physics.py`) for multi-machine MLE scanning.
 * `/models` - Pre-trained deep learning models (e.g., `cnn_14bus_model.h5`).
 * `/scripts` - Execution scripts for probing, benchmarking, and generating publication plots.
