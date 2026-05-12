@@ -2,6 +2,10 @@
 
 This repository contains the codebase for a novel Hybrid Transient Stability Assessment (TSA) framework. By integrating a physics-based Maximum Lyapunov Exponent (MLE) scanner with a data-driven 1D Convolutional Neural Network (CNN), this system achieves sub-cycle fault detection speeds on the **IEEE 14-bus standard test system**.
 
+The dataset generation leverages the high-fidelity ANDES library to act as a physically-authentic power grid data, providing a foundation that can scale effortlessly to other systems such as the IEEE 39-bus system. We can also work with external, third-party datasets like the Nordic 32.
+
+To create a balanced dataset, the ANDES library simulated three-phase short-circuit faults and sudden line outages. These diverse contingency scenarios were evaluated across a broad spectrum of Fault Clearing Times (FCT) to effectively benchmark assessment methodologies.
+
 **Key Performance Metrics (10,000-Case Benchmark):**
 * **Accuracy:** 99.99%
 * **Average Latency:** 12.26 ms 
